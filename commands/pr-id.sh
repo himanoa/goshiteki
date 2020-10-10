@@ -13,7 +13,7 @@ pr-id() {
         }
       }
     }
-  " | jq .data.repository.pullRequests.edges[0].node.id
+  " | jq -r .data.repository.pullRequests.edges[0].node.id
 }
 
 
