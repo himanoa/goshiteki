@@ -25,7 +25,6 @@ function! g:goshiteki#add_review_comment() abort
   let s:absolute_current_file_path = expand('%:p')
   let s:relative_file_path_from_git_root = split(s:absolute_current_file_path, s:git_root)[0]
 
-  echo(split(s:git_root, s:absolute_current_file_path))
   let s:position = line(".")
 
   execute 'split ' . s:add_review_comment_tempname
@@ -49,10 +48,6 @@ endfunction
 
 function! g:goshiteki#post_submit(status, tempname, pr_id) abort
   let l:body = join(readfile(a:tempname), "\n")
-  echo "foo"
-  echo a:pr_id
-  echo l:body
-  echo a:status
-  echo [s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"]
   call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"])
+  echo "Submit review(status: " . "a:status" . ")"
 endfunction
