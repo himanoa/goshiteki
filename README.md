@@ -22,4 +22,9 @@ Plug 'himanoa/goshiteki'
 
 2 Run this command
 ```
+gh auth login
 ```
+
+### Usages
+
+
