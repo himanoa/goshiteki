@@ -7,7 +7,7 @@ function! g:goshiteki#start_review() abort
   let l:origin_url = trim(system("git remote get-url origin"))
   let l:owner_and_name = ""
 
-  if matchstr(l:origin_url, "^git@")
+  if match(l:origin_url, "^git@") !=# -1
     let l:owner_and_name = split(matchstr(trim(system("git remote get-url origin")), ":.*/.*\.git$")[1:-5], '/')
   else
     let l:owner_and_name = split(matchstr(trim(system("git remote get-url origin")), "/.*/.*$")[1:], '/')
