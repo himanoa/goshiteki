@@ -12,7 +12,7 @@ function! g:goshiteki#start_review() abort
   let l:owner = owner_and_name[0]
   let l:name = owner_and_name[1]
 
-  return system([l:script_dir . 'pr-id', owner, name, current_branch])
+  return system([l:script_dir . 'pr-id.sh', owner, name, current_branch])
 endfunction
 
 function! g:goshiteki#add_review_comment() abort
