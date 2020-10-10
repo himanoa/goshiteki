@@ -1,8 +1,3 @@
-scriptencoding utf-8
-if exists('g:loaded_goshiteki')
-  finish
-endif
-
 let g:loaded_goshiteki = 1
 let s:script_dir = expand('<sfile>:p:h') . '/../commands/'
 let s:pr_id = ""
