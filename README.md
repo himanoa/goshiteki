@@ -1,6 +1,8 @@
 ## Goshiteki
 
-GitHub based code review tool for vim.
+GitHub based code review tool for neovim.
+
+![images.gif](./images/goshiteki.gif)
 
 ### Dependencies
 
