@@ -11,6 +11,7 @@ submit-review() {
       }
     }
   "
+  rm "$4"
 }
 
 
