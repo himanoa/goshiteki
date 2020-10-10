@@ -35,7 +35,7 @@ endfunction
 
 function! g:goshiteki#post_write_review_comment(relative_path_from_git_root, position, comment_file_name, output_json) abort
   let l:comment = join(readfile(a:comment_file_name), "\n")
-  system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json])
+  call system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json])
 endfunction
 
 function! g:goshiteki#submit_reviews(status) abort
@@ -54,5 +54,5 @@ function! g:goshiteki#post_submit(status, tempname, pr_id) abort
   echo l:body
   echo a:status
   echo [s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"]
-  system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./REVIEW_COMMENT_STATE"])
+  call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"])
 endfunction
