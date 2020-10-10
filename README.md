@@ -27,4 +27,7 @@ gh auth login
 
 ### Usages
 
-
+1. Open the review target file for neovim
+2. Execute `:GoshitekiStart` ex command.
+3. Move the cursor to the place where you want to comment and execute `:GoshitekiLineComment`
+4. Submit a review `:GoshitekiComment` or `GoshitekiApprove` or `GoshitekiRequestChanges`
