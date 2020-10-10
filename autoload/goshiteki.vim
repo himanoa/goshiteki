@@ -5,7 +5,6 @@ endif
 
 let g:loaded_goshiteki = 1
 let s:script_dir = expand('<sfile>:p:h') . '/../commands/'
-let s:review_comment_state_path = ""
 let s:pr_id = ""
 
 function! g:goshiteki#start_review() abort
@@ -26,7 +25,7 @@ function! g:goshiteki#start_review() abort
 endfunction
 
 function! g:goshiteki#add_review_comment() abort
-  let s:tempname = tempname()
+  let s:add_review_comment_tempname = tempname()
   let s:git_root = trim(system(['git', 'rev-parse', '--show-toplevel'])) . '/'
   let s:absolute_current_file_path = expand('%:p')
   let s:relative_file_path_from_git_root = split(s:absolute_current_file_path, s:git_root)[0]
@@ -34,16 +33,31 @@ function! g:goshiteki#add_review_comment() abort
   echo(split(s:git_root, s:absolute_current_file_path))
   let s:position = line(".")
 
-  execute 'split ' . s:tempname
+  execute 'split ' . s:add_review_comment_tempname
 
-  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:position, s:tempname, s:review_comment_state_path)
+  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:position, s:add_review_comment_tempname, "./.REVIEW_COMMENT_STATE")
 endfunction
 
 function! g:goshiteki#post_write_review_comment(relative_path_from_git_root, position, comment_file_name, output_json) abort
   let l:comment = join(readfile(a:comment_file_name), "\n")
-  let s:review_comment_state_path = system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json])
+  system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json])
 endfunction
 
-function! g:goshiteki#submit_reviews() abort
+function! g:goshiteki#submit_reviews(status) abort
+  let s:goshiteki_review_status = a:status
+  let s:submit_review_tempname = tempname()
 
+  execute 'split ' . s:submit_review_tempname
+
+  au BufHidden <buffer> :call g:goshiteki#post_submit(s:goshiteki_review_status, s:submit_review_tempname, s:pr_id)
+endfunction
+
+function! g:goshiteki#post_submit(status, tempname, pr_id) abort
+  let l:body = join(readfile(a:tempname), "\n")
+  echo "foo"
+  echo a:pr_id
+  echo l:body
+  echo a:status
+  echo [s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"]
+  system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./REVIEW_COMMENT_STATE"])
 endfunction
