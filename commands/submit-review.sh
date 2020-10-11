@@ -1,18 +1,26 @@
 #!/usr/bin/env bash
 
-
 # submit-review pr-id body status draft-reviews-file
 submit-review() {
-  comments=$(sed -r 's/\"([^"]+)":(.+)/\1:\2/' < "$4")
-  gh api graphql -f query="
-    mutation {
-      addPullRequestReview(input: {pullRequestId: \"$1\", event: $3, comments: $comments, body: \"$2\"}) {
+  local comments=$(jq -r '
+    "[" + (
+      map(
+        "{" + (to_entries | map("\(.key): \(.value | @json)") | join(", ")) + "}"
+      ) | join(", ")
+    ) + "]"' "$4")
+
+  gh api graphql \
+    -F pullRequestId="$1" \
+    -F body="$2" \
+    -F event="$3" \
+    -f query='
+    mutation($pullRequestId: ID!, $body: String, $event: String) {
+      addPullRequestReview(input: {pullRequestId: $pullRequestId, body: $body, event: $event, comments: '"$comments"'}) {
         clientMutationId
       }
     }
-  "
+  '
   rm "$4"
 }
-
 
 submit-review "$@"

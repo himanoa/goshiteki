@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
 pr-id() {
-  gh api graphql -f query="
-    query {
-      repository(owner: \"$1\", name:\"$2\") {
-        pullRequests(headRefName: \"$3\", first: 100) {
+  gh api graphql \
+    -F owner="$1" \
+    -F name="$2" \
+    -F headRefName="$3" \
+    -f query='
+    query($owner: String!, $name: String!, $headRefName: String!) {
+      repository(owner: $owner, name: $name) {
+        pullRequests(headRefName: $headRefName, first: 100) {
           edges {
             node {
               id
@@ -13,7 +17,7 @@ pr-id() {
         }
       }
     }
-  " | jq -r .data.repository.pullRequests.edges[0].node.id
+  ' | jq -r .data.repository.pullRequests.edges[0].node.id
 }
 
 
