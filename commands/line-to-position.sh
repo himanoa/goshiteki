@@ -23,10 +23,12 @@ line-to-position() {
   awk \
     -v line="$line" \
     -v target="$target" '
-    NR <= 4 {
+    !hunk && !/^@@/ {
       next
     }
     /^@@/ {
+      hunk = 1
+
       if (target == "add") {
         gsub(/^@@[^+]+\+| @@.*/, "")
       }
