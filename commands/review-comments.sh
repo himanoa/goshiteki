@@ -11,7 +11,7 @@ review-comments() {
 
   # TODO: Change upstream branch (currently `master`) to correct one!
   # TODO: Change `add` to correct one!
-  if ! position=$(git diff --diff-algorithm=default master -- "$path" | "$(dirname -- "$0")"/line-to-position "$line" add); then
+  if ! position=$(git diff --diff-algorithm=default master -- "$path" | "$(dirname -- "$0")"/line-to-position.sh "$line" add); then
     return 1
   fi
 

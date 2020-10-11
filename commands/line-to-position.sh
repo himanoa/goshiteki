@@ -90,7 +90,7 @@ line-in-range() {
       sum = $0
       gsub(/.*,/, "", sum)
 
-      for (i = start; i <= start + sum; ++i) {
+      for (i = int(start); i <= int(start) + int(sum); ++i) {
         if (i == line) {
           found = 1
           exit
