@@ -10,7 +10,7 @@ review-comments() {
   local base_branch=$4
   local position
 
-  if ! position=$(git diff --diff-algorithm=default "$(base_branch)" -- "$path" | "$(dirname -- "$0")"/line-to-position.sh "$line" add); then
+  if ! position=$(git diff --diff-algorithm=default "$base_branch" -- "$path" | "$(dirname -- "$0")"/line-to-position.sh "$line" add); then
     return 1
   fi
 
