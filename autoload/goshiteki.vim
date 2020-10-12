@@ -1,6 +1,7 @@
 let g:loaded_goshiteki = 1
 let s:script_dir = expand('<sfile>:p:h') . '/../commands/'
 let s:pr_id = ""
+let s:base_branch = ""
 
 function! g:goshiteki#start_review() abort
   let l:current_branch = system("git symbolic-ref --short HEAD")
@@ -16,7 +17,9 @@ function! g:goshiteki#start_review() abort
   let l:owner = l:owner_and_name[-2]
   let l:name = l:owner_and_name[-1]
 
-  let s:pr_id =  system([s:script_dir . 'pr-id.sh', trim(l:owner), trim(l:name), trim(l:current_branch)])
+  let l:pr = split(system([s:script_dir . 'pr-id.sh', trim(l:owner), trim(l:name), trim(l:current_branch)]), "\n")
+  let [s:pr_id, s:base_branch] = l:pr
+  echo s:base_branch
 endfunction
 
 function! g:goshiteki#add_review_comment() abort
@@ -29,12 +32,13 @@ function! g:goshiteki#add_review_comment() abort
 
   execute 'split ' . s:add_review_comment_tempname
 
-  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:position, s:add_review_comment_tempname, "./.REVIEW_COMMENT_STATE")
+  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:position, s:add_review_comment_tempname, s:base_branch)
 endfunction
 
 function! g:goshiteki#post_write_review_comment(relative_path_from_git_root, position, comment_file_name, output_json) abort
   let l:comment = join(readfile(a:comment_file_name), "\n")
-  call system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json])
+  let result = system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:position, l:comment, a:output_json, s:base_branch])
+  echo result
 endfunction
 
 function! g:goshiteki#submit_reviews(status) abort
