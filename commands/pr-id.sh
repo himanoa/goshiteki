@@ -11,7 +11,7 @@ pr-id() {
         pullRequests(headRefName: $headRefName, first: 100) {
           edges {
             node {
-              id,
+              id
               baseRefName
             }
           }
