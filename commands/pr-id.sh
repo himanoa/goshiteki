@@ -11,13 +11,14 @@ pr-id() {
         pullRequests(headRefName: $headRefName, first: 100) {
           edges {
             node {
-              id
+              id,
+              baseRefName
             }
           }
         }
       }
     }
-  ' | jq -r .data.repository.pullRequests.edges[0].node.id
+  ' | jq -r '.data.repository.pullRequests.edges[0].node[]' 
 }
 
 
