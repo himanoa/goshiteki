@@ -19,10 +19,7 @@ function! g:goshiteki#start_review() abort
 
   let l:pr = split(system([s:script_dir . 'pr-id.sh', trim(l:owner), trim(l:name), trim(l:current_branch)]), "\n")
 
-  if len(l:pr) == 0
-    echoerr 'A pull request is not found.'
-    return
-  elseif len(l:pr) == 1
+  if v:shell_error != 0
     echoerr l:pr[0]
     return
   endif
