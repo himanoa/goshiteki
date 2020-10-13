@@ -31,6 +31,7 @@ function! g:goshiteki#add_review_comment() abort
   let s:position = line(".")
 
   execute 'split ' . s:add_review_comment_tempname
+  set filetype=markdown
 
   au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:position, s:add_review_comment_tempname, s:base_branch)
 endfunction
