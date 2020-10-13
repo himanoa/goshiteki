@@ -35,10 +35,10 @@ function! g:goshiteki#add_review_comment() abort
   execute 'split ' . s:add_review_comment_tempname
   set filetype=markdown
 
-  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:start_position, s:add_review_comment_tempname, s:base_branch)
+  au BufHidden <buffer> :call g:goshiteki#post_write_review_comment(s:relative_file_path_from_git_root, s:start_position, s:last_position, s:add_review_comment_tempname, s:base_branch)
 endfunction
 
-function! g:goshiteki#post_write_review_comment(relative_path_from_git_root, start_position, comment_file_name, output_json) abort
+function! g:goshiteki#post_write_review_comment(relative_path_from_git_root, start_position, s:last_position, comment_file_name, output_json) abort
   let l:comment = join(readfile(a:comment_file_name), "\n")
   let result = system([s:script_dir . 'review-comments.sh', a:relative_path_from_git_root, a:start_position, l:comment, a:output_json, s:base_branch])
   echo result
