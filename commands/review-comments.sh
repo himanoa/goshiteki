@@ -8,18 +8,24 @@ review-comments() {
   local line=$2
   local body=$3
   local base_branch=$4
-  local position
 
-  if ! position=$(git diff --diff-algorithm=default "$base_branch" -- "$path" | "$(dirname -- "$0")"/line-to-position.sh "$line" add); then
+  if ! git diff --diff-algorithm=default "$base_branch" -- "$path" | "$(dirname -- "$0")"/line-in-range.sh "$line" add; then
     return 1
   fi
 
   jq \
     --arg path "$path" \
-    --arg position "$position" \
-    --arg body "$body" \
-    'flatten + [{path: $path, position: $position | tonumber, body: $body}]' \
-    <<< "${current:-[]}" > "$REVIEW_COMMENT_STATE"
+    --arg line "$line" \
+    --arg body "$body" '
+    flatten + [
+      {
+        path: $path,
+        line: $line | tonumber,
+        body: $body,
+        startSide: "RIGHT",
+        side: "RIGHT"
+      }
+    ]' <<< "${current:-[]}" > "$REVIEW_COMMENT_STATE"
 }
 
 review-comments "$@"
