@@ -18,7 +18,7 @@ pr-id() {
         }
       }
     }
-  ' | jq -r '.data.repository.pullRequests.edges[0].node[]' 
+  ' | jq -r '.data | select(.repository != null) | .repository.pullRequests.edges | select(.[] != null)[0].node[]'
 }
 
 
