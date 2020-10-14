@@ -24,7 +24,7 @@ function! g:goshiteki#start_review() abort
   echo s:base_branch
 endfunction
 
-function! g:goshiteki#add_review_comment() range
+function! g:goshiteki#add_review_comment() range abort
   let s:add_review_comment_tempname = tempname()
   let s:git_root = trim(system(['git', 'rev-parse', '--show-toplevel'])) . '/'
   let s:absolute_current_file_path = expand('%:p')
