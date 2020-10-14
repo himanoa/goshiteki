@@ -37,7 +37,7 @@ review-comments() {
       flatten + [
         {
           path: $path,
-          start_line: $start_line | tonumber,
+          startLine: $start_line | tonumber,
           line: $end_line | tonumber,
           body: $body,
           startSide: "RIGHT",
