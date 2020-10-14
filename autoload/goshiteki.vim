@@ -18,6 +18,12 @@ function! g:goshiteki#start_review() abort
   let l:name = l:owner_and_name[-1]
 
   let l:pr = split(system([s:script_dir . 'pr-id.sh', trim(l:owner), trim(l:name), trim(l:current_branch)]), "\n")
+
+  if v:shell_error != 0
+    echoerr l:pr[0]
+    return
+  endif
+
   let [s:pr_id, s:base_branch] = l:pr
   echo s:base_branch
 endfunction
