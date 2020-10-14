@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 pr-id() {
+  set -o pipefail
   local result
 
-  result=$(gh api graphql \
+  result="$(gh api graphql \
     -F owner="$1" \
     -F name="$2" \
     -F headRefName="$3" \
@@ -20,14 +21,16 @@ pr-id() {
         }
       }
     }
-  ')
+  ' | jq -r '(.data.repository.pullRequests.edges[0].node // {})[]')"
 
-  (( $? )) && return 1
+  (( "$?" )) && return 1
 
-  if ! jq -r '.data.repository.pullRequests.edges[0].node[]' <<< $result 2> /dev/null; then
+  if [[ -z "$result" ]]; then
     echo 'The pull request was not found.'
     return 2
   fi
+
+  echo "$result"
 }
 
 
