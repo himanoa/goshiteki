@@ -1,5 +1,8 @@
 ## Goshiteki
 
+[![Gitter](https://badges.gitter.im/goshiteki/community.svg)](https://gitter.im/goshiteki/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+
 GitHub based code review tool for neovim.
 
 ![images.gif](./images/goshiteki.gif)
