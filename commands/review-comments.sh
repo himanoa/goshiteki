@@ -17,7 +17,7 @@ review-comments() {
   if [ "$start_line" = "$end_line" ]; then
     jq \
       --arg path "$path" \
-      --arg line "$line" \
+      --arg start_line "$start_line" \
       --arg body "$body" '
       flatten + [
         {
@@ -31,7 +31,8 @@ review-comments() {
   else
     jq \
       --arg path "$path" \
-      --arg line "$line" \
+      --arg start_line "$start_line" \
+      --arg end_line "$end_line" \
       --arg body "$body" '
       flatten + [
         {
