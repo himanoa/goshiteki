@@ -14,6 +14,10 @@ review-comments() {
     return 1
   fi
 
+  if ! git diff --diff-algorithm=default "$base_branch" -- "$path" | "$(dirname -- "$0")"/line-in-range.sh "$end_line" add; then
+    return 1
+  fi
+
   if [ "$start_line" = "$end_line" ]; then
     jq \
       --arg path "$path" \
