@@ -18,7 +18,7 @@ review-comments() {
     return 1
   fi
 
-  if [ "$start_line" = "$end_line" ]; then
+  if [[ "$start_line" = "$end_line" ]]; then
     start_line=
   fi
 
