@@ -10,9 +10,7 @@ target() {
         next
       }
       filename = $0
-      if (!/^--- a\//) {
-        getline
-      }
+      getline
       if (/^\+\+\+ b\//) {
         filename = $0
       }
@@ -27,6 +25,7 @@ target() {
           ++gap
         }
         if (!/^[ +-]/) {
+          printf "%s:%d: \n", filename, 1
           next
         }
         if (/^\+/) {
