@@ -9,9 +9,14 @@ target() {
       if (!/^--- /) {
         next
       }
-      getline
       filename = $0
-      gsub(/^+++ b\//, "", filename)
+      if (!/^--- a\//) {
+        getline
+      }
+      if (/^\+\+\+ b\//) {
+        filename = $0
+      }
+      gsub(/^(--- a|\+\+\+ b)\//, "", filename)
     }
     /^@@ / {
       line = $0
@@ -20,6 +25,9 @@ target() {
         getline
         if (/^[ +]/) {
           ++gap
+        }
+        if (!/^[ +-]/) {
+          next
         }
         if (/^\+/) {
           break
