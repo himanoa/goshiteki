@@ -10,3 +10,4 @@ command! -range GoshitekiLineComment <line1>,<line2> call goshiteki#add_review_c
 command! GoshitekiApprove call goshiteki#submit_reviews("APPROVE")
 command! GoshitekiComment call goshiteki#submit_reviews("COMMENT")
 command! GoshitekiRequestChanges call goshiteki#submit_reviews("REQUEST_CHANGES")
+command! GoshitekiTarget call goshiteki#target()
