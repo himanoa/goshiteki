@@ -71,3 +71,7 @@ function! g:goshiteki#post_submit(status, tempname, pr_id) abort
   call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, "./.REVIEW_COMMENT_STATE"])
   echo "Submit review(status: " . "a:status" . ")"
 endfunction
+
+function! g:goshiteki#target() abort
+  call setqflist([], ' ', {'lines': systemlist([s:script_dir . 'target.sh', s:base_branch])}) | cw
+endfunction
