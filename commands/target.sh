@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 target() {
-  local headRefName=$1
+  local base_branch=$1
 
-  git diff "$(git merge-base HEAD "$headRefName")" HEAD | awk '
+  git diff --diff-algorithm=default "$(git merge-base HEAD "$base_branch")" HEAD | awk '
     /^index / {
       getline
       if (!/^--- /) {
