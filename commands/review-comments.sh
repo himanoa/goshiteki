@@ -19,24 +19,36 @@ review-comments() {
   fi
 
   if [[ "$start_line" = "$end_line" ]]; then
-    start_line=
+    jq \
+      --arg path "$path" \
+      --arg start_line "$start_line" \
+      --arg body "$body" '
+      flatten + [
+        {
+          path: $path,
+          line: $start_line | tonumber,
+          body: $body,
+          startSide: "RIGHT",
+          side: "RIGHT"
+        }
+      ]' <<< "${current:-[]}" > "$REVIEW_COMMENT_STATE"
+  else
+    jq \
+      --arg path "$path" \
+      --arg start_line "$start_line" \
+      --arg end_line "$end_line" \
+      --arg body "$body" '
+      flatten + [
+        {
+          path: $path,
+          startLine: $start_line | tonumber,
+          line: $end_line | tonumber,
+          body: $body,
+          startSide: "RIGHT",
+          side: "RIGHT"
+        }
+      ]' <<< "${current:-[]}" > "$REVIEW_COMMENT_STATE"
   fi
-
-  jq \
-  --arg path "$path" \
-  --arg start_line "$start_line" \
-  --arg end_line "$end_line" \
-  --arg body "$body" '
-  flatten + [
-    {
-      path: $path,
-      startLine: try ($start_line | tonumber) catch null,
-      line: $end_line | tonumber,
-      body: $body,
-      startSide: "RIGHT",
-      side: "RIGHT"
-    }
-  ]' <<< "${current:-[]}" > "$REVIEW_COMMENT_STATE"
 }
 
 review-comments "$@"
