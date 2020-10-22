@@ -11,7 +11,7 @@ pr-id() {
     -f query='
     query($owner: String!, $name: String!, $headRefName: String!) {
       repository(owner: $owner, name: $name) {
-        pullRequests(headRefName: $headRefName, first: 100) {
+        pullRequests(headRefName: $headRefName, first: 1, states: [OPEN]) {
           edges {
             node {
               id
