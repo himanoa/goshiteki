@@ -27,8 +27,7 @@ submit-review() {
         clientMutationId
       }
     }
-  '
-  rm "$4"
+  ' && rm "$4"
 }
 
 submit-review "$@"
