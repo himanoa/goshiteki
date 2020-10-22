@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
 target() {
+  local dir=${PWD#$(git rev-parse --show-toplevel)}
+  local tmp=${dir//[^\/]/}
+  local relative_prefix=${tmp//\//../}
   local base_branch=$1
 
-  git diff --diff-algorithm=default "$(git merge-base HEAD "$base_branch")" HEAD | awk '
+  git diff --diff-algorithm=default "$(git merge-base HEAD "$base_branch")" HEAD |
+    awk -v relative_prefix="$relative_prefix" '
     /^index / {
       getline
       if (!/^--- /) {
@@ -25,7 +29,7 @@ target() {
           ++gap
         }
         if (!/^[ +-]/) {
-          printf "%s:%d: \n", filename, 1
+          printf "%s%s:%d: \n", relative_prefix, filename, 1
           next
         }
         if (/^\+/) {
@@ -34,7 +38,7 @@ target() {
       }
       context = $0
       gsub(/^[ +-]/, "", context)
-      printf "%s:%d:%s \n", filename, int(line) + int(gap), context
+      printf "%s%s:%d:%s \n", relative_prefix, filename, int(line) + int(gap), context
     }
   '
 }
