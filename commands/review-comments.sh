@@ -10,6 +10,10 @@ review-comments() {
   local body=$4
   local base_branch=$5
 
+  if [[ -z $body ]]; then
+    return 1
+  fi
+
   if ! git diff --diff-algorithm=default "$(git merge-base HEAD "$base_branch")" -- "$path" | "$(dirname -- "$0")"/line-in-range.sh "$start_line" add; then
     return 1
   fi
