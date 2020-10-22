@@ -28,6 +28,11 @@ endfunction
 function! g:goshiteki#add_review_comment() range abort
   let s:add_review_comment_tempname = tempname()
   let s:git_root = trim(system(['git', 'rev-parse', '--show-toplevel'])) . '/'
+  let s:git_dir = getenv('GIT_DIR')
+  if s:git_dir == 0
+    let s:git_dir = '.git'
+  endif
+
   let s:absolute_current_file_path = expand('%:p')
   let s:relative_file_path_from_git_root = split(s:absolute_current_file_path, s:git_root)[0]
 
@@ -62,7 +67,7 @@ endfunction
 
 function! g:goshiteki#post_submit(status, tempname, pr_id) abort
   let l:body = join(readfile(a:tempname), "\n")
-  call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, './.REVIEW_COMMENT_STATE'])
+  call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, s:git_root . s:git_dir . '/REVIEW_COMMENT_STATE'])
   echo 'Submit review(status: ' . 'a:status' . ')'
 endfunction
 
