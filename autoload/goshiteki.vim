@@ -71,7 +71,7 @@ function! g:goshiteki#post_submit(status, tempname, pr_id) abort
     let l:body = join(readfile(a:tempname), "\n")
   endif
   call system([s:script_dir . 'submit-review.sh', a:pr_id, l:body, a:status, s:git_root . s:git_dir . '/REVIEW_COMMENT_STATE'])
-  echo 'Submit review(status: ' . 'a:status' . ')'
+  echo 'Submit review(status: ' . a:status . ')'
 endfunction
 
 function! g:goshiteki#target() abort
