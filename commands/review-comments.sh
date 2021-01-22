@@ -2,7 +2,7 @@
 
 # review-comments readme.md 1 body json
 review-comments() {
-  local REVIEW_COMMENT_STATE="./.REVIEW_COMMENT_STATE"
+  local REVIEW_COMMENT_STATE=$(git rev-parse --show-toplevel)/${GIT_DIR:-.git}/REVIEW_COMMENT_STATE
   local current=$(cat -- "$REVIEW_COMMENT_STATE" 2> /dev/null)
   local path=$1
   local start_line=$2
